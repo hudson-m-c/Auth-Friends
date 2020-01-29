@@ -2,10 +2,16 @@ import React from 'react';
 import { axiosWithAuth } from '../api';
 
 import { Friend } from './Friend';
+import { FriendForm } from './FriendForm';
 
 const FriendsList = props => {
     
     const [friends, setFriends] = React.useState({list: []});
+    const [toggle, setToggle] = React.useState(false);
+
+    function addNewFriend() {
+        setToggle(!toggle);
+    }
 
     React.useEffect( () => {
         axiosWithAuth().get('http://localhost:5000/api/friends')
@@ -16,7 +22,7 @@ const FriendsList = props => {
         .catch( err => {
             console.log(err);
         })
-    }, [])
+    }, [toggle])
     
     function populateFriends() {
         if(friends) {
@@ -31,6 +37,8 @@ const FriendsList = props => {
 
     return (
         <div className='friends-list'>
+            <FriendForm onNewFriend={ () => addNewFriend()} />
+            
             {
                 populateFriends()
             }
